@@ -6,15 +6,14 @@ import (
 	"Valter/utility"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"log"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	//err := godotenv.Load()
+	//if err != nil {
+	//	panic(err)
+	//}
 	db, err := db2.InitDB()
 	if err != nil {
 		panic(err)
