@@ -56,3 +56,69 @@ func GenerateCode() string {
 func SupabaseClient() *storage_go.Client {
 	return storage_go.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("SUPABASE_API"), nil)
 }
+
+func SendMailsBook() {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "aryaizra2@gmail.com")
+	m.SetHeader("To", "akunuplay7@gmail.com")
+	m.SetHeader("Subject", "Booking Receipt")
+
+	body := `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Checkout Summary</title>
+		</head>
+		<body>
+			<h1>Your E-commerce Checkout Summary</h1>
+			<p>Dear Customer,</p>
+			<p>Thank you for shopping with us! Here is a summary of your recent order:</p>
+
+			<table style="border-collapse: collapse; width: 100%;">
+				<tr>
+					<th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Product</th>
+					<th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Quantity</th>
+					<th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Price</th>
+				</tr>
+				<tr>
+					<td style="border: 1px solid #dddddd; padding: 8px;">Product Name 1</td>
+					<td style="border: 1px solid #dddddd; padding: 8px;">1</td>
+					<td style="border: 1px solid #dddddd; padding: 8px;">$19.99</td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid #dddddd; padding: 8px;">Product Name 2</td>
+					<td style="border: 1px solid #dddddd; padding: 8px;">2</td>
+					<td style="border: 1px solid #dddddd; padding: 8px;">$29.99</td>
+				</tr>
+				<!-- Add more rows for additional products -->
+
+				<tr>
+					<td style="border: 1px solid #dddddd; padding: 8px;"><strong>Total:</strong></td>
+					<td style="border: 1px solid #dddddd; padding: 8px;"></td>
+					<td style="border: 1px solid #dddddd; padding: 8px;"><strong>$79.97</strong></td>
+				</tr>
+			</table>
+
+			<p>Thank you for your purchase. Your order will be shipped to the following address:</p>
+			<address>
+				John Doe<br>
+				123 Main Street<br>
+				City, State 12345<br>
+			</address>
+
+			<p>If you have any questions or need further assistance, please don't hesitate to contact our customer support.</p>
+
+			<p>Thank you for shopping with us!</p>
+		</body>
+		</html>
+	`
+
+	m.SetBody("text/html", body)
+
+	d := gomail.NewDialer("smtp.gmail.com", 587, "aryaizra2@gmail.com", os.Getenv("PASS"))
+
+	// Send the email to Bob, Cora and Dan.
+	if err := d.DialAndSend(m); err != nil {
+		panic(err)
+	}
+}

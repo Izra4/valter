@@ -35,10 +35,10 @@ type userData struct {
 }
 
 func (uh *UserHandler) Login(c *gin.Context) {
-	uname := c.PostForm("uname")
+	email := c.PostForm("email")
 	pass := c.PostForm("pass")
 
-	tokenStr, err := uh.userService.LoginUser(c, uname, pass)
+	tokenStr, err := uh.userService.LoginUser(c, email, pass)
 	if err != nil {
 		return
 	}

@@ -137,19 +137,19 @@ func (u *userService) DeleteUser(c *gin.Context, id uint32) error {
 	return nil
 }
 
-func (u *userService) LoginUser(c *gin.Context, username string, password string) (string, error) {
-	if username == "" || password == "" {
+func (u *userService) LoginUser(c *gin.Context, email string, password string) (string, error) {
+	if email == "" || password == "" {
 		utility.HttpBadRequest(c, "Fill the empty field")
-		return "", errors.New("username is empty")
+		return "", errors.New("fill all field")
 	}
-	data, err := u.repository.GetUserbyUsername(username)
+	data, err := u.repository.GetUserbyEmail(email)
 	if err != nil {
-		utility.HttpDataNotFound(c, "invalid username / passowrd", err)
+		utility.HttpDataNotFound(c, "invalid email / password", err)
 		return "", err
 	}
 	err = utility.ComparePass(data.Password, password)
 	if err != nil {
-		utility.HttpBadRequest(c, "invalid username / password")
+		utility.HttpBadRequest(c, "invalid email / password")
 		return "", err
 	}
 	token, err := utility.Token(data)
