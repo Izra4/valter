@@ -42,6 +42,7 @@ func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler) {
 func StartEngine(r *gin.Engine, db *sql.DB) {
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
