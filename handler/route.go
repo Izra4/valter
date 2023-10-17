@@ -2,6 +2,7 @@ package handler
 
 import (
 	"Valter/db/sqlc"
+	"Valter/middleware"
 	"Valter/repository"
 	"Valter/service"
 	"database/sql"
@@ -29,6 +30,7 @@ func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler) {
 	//user side
 	r.POST("/register", uh.Register)
 	r.POST("/login", uh.Login)
+	r.GET("/user-profile", middleware.Auth(), uh.GetDataUser)
 	r.POST("/forgot-pass", uh.ForgotPass)
 	r.POST("/verify-code", uh.VerfiyCode)
 
@@ -50,8 +52,8 @@ func StartEngine(r *gin.Engine, db *sql.DB) {
 			c.Next()
 		}
 	})
-	uh, ph, fh := Handler(db)
+	uh, ph, _ := Handler(db)
 	route(r, uh, ph)
-	ph.Dummy()
-	fh.FeatDummy()
+	//ph.Dummy()
+	//fh.FeatDummy()
 }

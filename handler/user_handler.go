@@ -28,6 +28,12 @@ func (uh *UserHandler) Register(c *gin.Context) {
 	utility.HttpSuccessResponse(c, "New user created", user)
 }
 
+type userData struct {
+	ID    uint32 `json:"id"`
+	Uname string `json:"uname"`
+	Email string `json:"email"`
+}
+
 func (uh *UserHandler) Login(c *gin.Context) {
 	uname := c.PostForm("uname")
 	pass := c.PostForm("pass")
@@ -39,6 +45,22 @@ func (uh *UserHandler) Login(c *gin.Context) {
 	utility.HttpSuccessResponse(c, "Login success", map[string]string{
 		"token": tokenStr,
 	})
+}
+
+func (uh *UserHandler) GetDataUser(c *gin.Context) {
+	id, _ := c.Get("user")
+	claims := id.(utility.UserClaims)
+	data, err := uh.userService.GetUserbyId(uint32(claims.ID))
+	if err != nil {
+		utility.HttpDataNotFound(c, "Data not found", err)
+		return
+	}
+	result := userData{
+		ID:    data.ID,
+		Uname: data.Username,
+		Email: data.Email,
+	}
+	utility.HttpSuccessResponse(c, "succes to get data", result)
 }
 
 func (uh *UserHandler) ForgotPass(c *gin.Context) {

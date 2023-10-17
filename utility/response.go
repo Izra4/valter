@@ -36,3 +36,13 @@ func HttpSuccessResponse(c *gin.Context, msg string, data interface{}) {
 		"data":    data,
 	})
 }
+
+func HttpForbiddenResponse(c *gin.Context, msg string, err error) {
+	c.JSON(403, gin.H{
+		"status":  "fail",
+		"message": msg,
+		"data": gin.H{
+			"err": err,
+		},
+	})
+}
