@@ -3,6 +3,7 @@ package handler
 import (
 	"Valter/service"
 	"Valter/utility"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"time"
@@ -18,6 +19,11 @@ func NewBookingHandler(bookingService service.BookingService, productService ser
 }
 
 func (bh *BookingHandler) CreateBooking(c *gin.Context) {
+	_, ok := c.Get("user")
+	if !ok {
+		utility.HttpInternalErrorResponse(c, "Failed to get user", errors.New("failed to get user"))
+		return
+	}
 	productIdStr := c.Param("id")
 	productId, _ := strconv.Atoi(productIdStr)
 	fname := c.PostForm("fname")

@@ -43,7 +43,7 @@ func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler, bh *BookingHandle
 	r.GET("/product-details/:id", ph.GetProductById)
 
 	//Booking
-	r.POST("/bookings/:id", bh.CreateBooking)
+	r.POST("/bookings/:id", middleware.Auth(), bh.CreateBooking)
 }
 
 func StartEngine(r *gin.Engine, db *sql.DB) {
