@@ -8,6 +8,22 @@ import (
 	"database/sql"
 )
 
+type Booking struct {
+	ID        string
+	Createdat sql.NullTime
+	Updatedat sql.NullTime
+	Deletedat sql.NullTime
+	Fname     string
+	Lname     string
+	Job       string
+	Email     string
+	Phone     string
+	Country   string
+	Address   string
+	Message   string
+	Productid uint32
+}
+
 type Feature struct {
 	ID          uint32
 	Createdat   sql.NullTime

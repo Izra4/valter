@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Handler(db *sql.DB) (*UserHandler, *ProductHandler, *FeatHandler) {
+func Handler(db *sql.DB) (*UserHandler, *ProductHandler, *FeatHandler, *BookingHandler) {
 	queries := sqlc.New(db)
 	userRepo := repository.NewUserRepository(queries)
 	userServ := service.NewUserService(userRepo)
@@ -22,11 +22,15 @@ func Handler(db *sql.DB) (*UserHandler, *ProductHandler, *FeatHandler) {
 	featRepo := repository.NewFeatureRepository(queries)
 	featServ := service.NewFeatService(featRepo)
 	featHand := NewFeatHandler(featServ)
-	return userHand, prodHand, featHand
+
+	bookRepo := repository.NewBookingRepository(queries)
+	bookServ := service.NewBookingService(bookRepo)
+	bookhand := NewBookingHandler(bookServ, prodServ)
+	return userHand, prodHand, featHand, bookhand
 
 }
 
-func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler) {
+func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler, bh *BookingHandler) {
 	//user side
 	r.POST("/register", uh.Register)
 	r.POST("/login", uh.Login)
@@ -37,6 +41,9 @@ func route(r *gin.Engine, uh *UserHandler, ph *ProductHandler) {
 	//Product
 	r.GET("/get-all-products", ph.GetAllProducts)
 	r.GET("/product-details/:id", ph.GetProductById)
+
+	//Booking
+	r.POST("/bookings/:id", bh.CreateBooking)
 }
 
 func StartEngine(r *gin.Engine, db *sql.DB) {
@@ -53,8 +60,8 @@ func StartEngine(r *gin.Engine, db *sql.DB) {
 			c.Next()
 		}
 	})
-	uh, ph, _ := Handler(db)
-	route(r, uh, ph)
+	uh, ph, _, bh := Handler(db)
+	route(r, uh, ph, bh)
 	//ph.Dummy()
 	//fh.FeatDummy()
 }
